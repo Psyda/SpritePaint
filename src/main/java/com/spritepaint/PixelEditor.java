@@ -6,12 +6,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
 /**
@@ -25,7 +22,7 @@ public class PixelEditor extends JFrame
     private final PixelEditorPanel canvas;
     private final SpriteStore store;
     private final JLabel statusLabel;
-    private final JPanel colorSwatch;
+    private JPanel colorSwatch;
     private final JLabel coordLabel;
 
     private SpriteTarget currentTarget;
@@ -35,7 +32,7 @@ public class PixelEditor extends JFrame
     private BiConsumer<String, BufferedImage> onSaveApply;
 
     // Recently used colors
-    private final java.util.List<Color> recentColors = new java.util.ArrayList<>();
+    private final java.util.List<Color> recentColors = new ArrayList<>();
     private final JPanel recentColorsPanel;
 
     // Default OSRS-inspired palette
@@ -151,6 +148,7 @@ public class PixelEditor extends JFrame
         });
 
         pack();
+        colorSwatch = null;
     }
 
     /**
@@ -272,10 +270,10 @@ public class PixelEditor extends JFrame
         colorSwatch.setBackground(canvas.getActiveColor());
         colorSwatch.setBorder(new LineBorder(Color.WHITE, 2));
         colorSwatch.setToolTipText("Current color (click to change)");
-        colorSwatch.addMouseListener(new java.awt.event.MouseAdapter()
+        colorSwatch.addMouseListener(new MouseAdapter()
         {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e)
+            public void mouseClicked(MouseEvent e)
             {
                 chooseColor();
             }
@@ -311,10 +309,10 @@ public class PixelEditor extends JFrame
             swatch.setBackground(c);
             swatch.setBorder(new LineBorder(new Color(80, 80, 80), 1));
             swatch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            swatch.addMouseListener(new java.awt.event.MouseAdapter()
+            swatch.addMouseListener(new MouseAdapter()
             {
                 @Override
-                public void mouseClicked(java.awt.event.MouseEvent e)
+                public void mouseClicked(MouseEvent e)
                 {
                     setEditorColor(c);
                 }
@@ -340,10 +338,10 @@ public class PixelEditor extends JFrame
         transparentSwatch.setBorder(new LineBorder(new Color(80, 80, 80), 1));
         transparentSwatch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         transparentSwatch.setToolTipText("Transparent (eraser)");
-        transparentSwatch.addMouseListener(new java.awt.event.MouseAdapter()
+        transparentSwatch.addMouseListener(new MouseAdapter()
         {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e)
+            public void mouseClicked(MouseEvent e)
             {
                 canvas.setActiveTool(PixelEditorPanel.Tool.ERASER);
             }
@@ -524,10 +522,10 @@ public class PixelEditor extends JFrame
             swatch.setBackground(c);
             swatch.setBorder(new LineBorder(new Color(80, 80, 80), 1));
             swatch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            swatch.addMouseListener(new java.awt.event.MouseAdapter()
+            swatch.addMouseListener(new MouseAdapter()
             {
                 @Override
-                public void mouseClicked(java.awt.event.MouseEvent e)
+                public void mouseClicked(MouseEvent e)
                 {
                     setEditorColor(c);
                 }
@@ -548,7 +546,7 @@ public class PixelEditor extends JFrame
         return btn;
     }
 
-    private JButton makeButton(String text, java.awt.event.ActionListener action)
+    private JButton makeButton(String text, ActionListener action)
     {
         JButton btn = new JButton(text);
         styleButton(btn);
